@@ -1,2 +1,2 @@
-# sql_practice
-SQL 연습공간
+# SQL 연습공간
+
