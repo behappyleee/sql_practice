@@ -74,7 +74,7 @@ INSERT INTO emp_table VALUES('개발주임', '정보이사', '3333-1-1');
 
 SELECT * FROM emp_table;
 
-SELECT a.phone FROM emp_table a INNER JOIN emp_table b ON a.manager = b.emp; 
+SELECT a.emp, a.manager, b.phone FROM emp_table a INNER JOIN emp_table b ON a.manager = b.emp; 
 
 
 
