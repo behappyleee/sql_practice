@@ -54,8 +54,12 @@ SELECT * FROM naver_db.buy b;
 -- FOREIGN KEY 는 반드시 부모테이블에 존재하여야 함 (안그러면 에러가 발생)
 
 
-
-
+-- TITLE 까지 출력을 원함 ..
+SELECT 
+ 	   title
+ 	 , MAX(price)
+  FROM movies
+ GROUP BY titles;
 
 
 
