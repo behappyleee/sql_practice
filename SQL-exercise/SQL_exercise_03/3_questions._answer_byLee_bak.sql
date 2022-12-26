@@ -69,52 +69,19 @@ INNER JOIN warehouses w
 	 WHERE w.capacity 		
 );
 
+
+
+
+
 -- 3.10 Select the codes of all the boxes located in Chicago.
-SELECT b.code, w.location FROM boxes b INNER JOIN warehouses w ON b.warehouse = w.code WHERE w.location = 'Chicago';
-
 -- 3.11 Create a new warehouse in New York with a capacity for 3 boxes.
-INSERT INTO warehouses(code, location, capacity) VALUES(6,'New York', 3);
-
 -- 3.12 Create a new box, with code "H5RT", containing "Papers" with a value of $200, and located in warehouse 2.
-INSERT INTO boxes (code, contents, value, warehouse) VALUES ('H5RT', 'Papers', 200, 2);
-
 -- 3.13 Reduce the value of all boxes by 15%.
-UPDATE boxes SET value = (value*0.85);
-
 -- 3.14 Remove all boxes with a value lower than $100.
-DELETE FROM boxes WHERE value < 100;
-
-SELECT * FROM warehouses w;
-SELECT * FROM boxes b;
-
-SELECT warehouse, count(*) FROM boxes b GROUP BY Warehouse;
-
 -- 3.15 Remove all boxes from saturated warehouses.
-
--- 되지 않음 확인 하여보기 !!!!
-DELETE FROM boxes b WHERE b.warehouse IN (
-	SELECT	b2.warehouse
-	  FROM  boxes b2
-  GROUP BY b2.warehouse 				
-  HAVING count(b2.warehouse) > (
-  	SELECT w.capacity  
-  	  FROM warehouses w
-  	WHERE w.code = b2.warehouse 
-  )
-);
-
 -- 3.16 Add Index for column "Warehouse" in table "boxes"
     -- !!!NOTE!!!: index should NOT be used on small tables in practice
-SHOW INDEX FROM boxes; 	
-CREATE INDEX box_warehouse ON boxes (warehouse);
-
 -- 3.17 Print all the existing indexes
     -- !!!NOTE!!!: index should NOT be used on small tables in practice
-SHOW INDEX FROM boxes;
-
--- TODO INDEX 삭제 하기 Foreign Key 걸려 있음 !!!!!!!!!!!!!!!!!
 -- 3.18 Remove (drop) the index you added just
     -- !!!NOTE!!!: index should NOT be used on small tables in practice
-
-
-
