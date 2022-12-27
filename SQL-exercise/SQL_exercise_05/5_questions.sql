@@ -1,9 +1,28 @@
 -- https://en.wikibooks.org/wiki/SQL_Exercises/Pieces_and_providers
 -- 5.1 Select the name of all the pieces. 
+SELECT p.name FROM pieces p;
+
 -- 5.2  Select all the providers' data. 
+SELECT code, name FROM providers p;
+
 -- 5.3 Obtain the average price of each piece (show only the piece code and the average price).
+		SELECT 
+			  p.code
+			, AVG(pv.price) AS '평균가격'	
+		  FROM pieces p 
+    INNER JOIN provides pv 
+            ON p.code = pv.piece  
+	GROUP BY p.code;
+
 -- 5.4  Obtain the names of all providers who supply piece 1.
+SELECT * FROM pieces pe INNER JOIN providers p ON pe.code = p.code; 
+
 -- 5.5 Select the name of pieces provided by provider with code "HAL".
+SELECT pv.piece FROM provides pv WHERE pv.provider = 'HAL';
+
+
+-- TODO 여기서부터 진행 하기 !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 -- 5.6
 -- ---------------------------------------------
 -- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
