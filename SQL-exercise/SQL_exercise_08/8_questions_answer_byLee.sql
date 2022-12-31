@@ -112,17 +112,40 @@ SELECT * FROM Undergoes; -- 수슬하는 의사 List
  	  
 -- 8.5 Obtain the information for appointments where a patient met with a physician other than his/her primary care physician. Show the following information: Patient name, physician name, nurse name (if any), start and end time of appointment, examination room, and the name of the patient's primary care physician.
 
-				SELECT * FROM appointment a  	  
- 	  
- 	  
 
  	  
  	  
--- 8.6 The Patient field in Undergoes is redundant, since we can obtain it from the Stay table. There are no constraints in force to prevent inconsistencies between these two tables. More specifically, the Undergoes table may include a row where the patient ID does not match the one we would obtain from the Stay table through the Undergoes.Stay foreign key. Select all rows from Undergoes that exhibit this inconsistency.
-
+-- 8.6 The Patient field in Undergoes is redundant, 
+-- since we can obtain it from the Stay table. 
+-- There are no constraints in force to prevent inconsistencies between these two tables.
+-- More specifically, the Undergoes table may include a row where the patient ID 
+-- does not match the one we would obtain from the Stay table through the Undergoes.Stay foreign key. 
+-- Select all rows from Undergoes that exhibit this inconsistency.
+ 	  SELECT * 
+ 	    FROM undergoes u 
+  INNER JOIN stay s
+ 		  ON u.stay = s.Stayid
+ 	   WHERE u.patient != s.patient; 		
+	
+ 	  -- 위에 쿼리 보다 성능이 좋을 듯 ... ??/
+ 	  SELECT * 
+ 	    FROM undergoes u  
+ 	   WHERE u.patient != (
+ 	   		SELECT s.patient			
+ 	   		  FROM stay s
+ 	   		 WHERE u.stay = s.stayid 
+ 	   ) 
+ 	   
+ 	   
+-- TODO 여기서부터 다시 시작 하기 !!!!! (blocoCode 및 Block Floor 숙지 !!!) 	   
+-- 8.7 Obtain the names of all the nurses who have ever been on call for room 123.
+SELECT * FROM nurse n;
+SELECT * FROM on_call oc;
+SELECT * FROM block b;  
+SELECT * FROM 
  	  
- 	  -- 8.7 Obtain the names of all the nurses who have ever been on call for room 123.
--- 8.8 The hospital has several examination rooms where appointments take place. Obtain the number of appointments that have taken place in each examination room.
+ 	  
+ 	  -- 8.8 The hospital has several examination rooms where appointments take place. Obtain the number of appointments that have taken place in each examination room.
 -- 8.9 Obtain the names of all patients (also include, for each patient, the name of the patient's primary care physician), such that \emph{all} the following are true:
     -- The patient has been prescribed some medication by his/her primary care physician.
     -- The patient has undergone a procedure with a cost larger that $5,000
