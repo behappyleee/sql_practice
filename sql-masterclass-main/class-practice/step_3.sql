@@ -62,5 +62,48 @@ SELECT
 FROM trading.prices
 GROUP BY ticker;
 
+	
+-- Question 8
+-- How many days from the trading.prices table exist where the high price of Bitcoin is over $30,000?
+SELECT datediff(now(), p.market_date), p.market_date 
+FROM trading.prices p WHERE p.price > 30000 ORDER BY p.market_date ASC LIMIT 1;
 
+-- ANSWER
+SELECT
+  COUNT(*) AS row_count
+FROM trading.prices
+WHERE ticker = 'BTC'
+  AND high > 30000;
 
+ 
+-- Question 9
+-- How many "breakout" days were there in 2020 where the price column is greater than 
+-- the open column for each ticker?
+SELECT * FROM trading.prices p LIMIT 5;
+
+SELECT p.ticker AS 'Coin Name', count(*) AS 'Breakout Days' FROM trading.prices p 
+WHERE YEAR(p.market_date) = 2020 AND p.price > p.`open` GROUP BY p.ticker;
+
+-- ANSWER
+SELECT
+  ticker,
+  SUM(CASE WHEN price > open THEN 1 ELSE 0 END) AS breakout_days
+FROM trading.prices
+WHERE DATE_TRUNC('YEAR', market_date) = '2020-01-01'
+GROUP BY ticker;
+
+-- Question 10
+-- How many "non_breakout" days were there in 2020 where the price column is 
+-- less than the open column for each ticker?
+
+SELECT p.ticker, count(*) AS 'breakout_days'
+FROM trading.prices p WHERE YEAR(p.market_date) = 2020 AND p.`open` > p.price  GROUP BY p.ticker; 
+
+-- ANSWER
+SELECT
+  ticker,
+  SUM(CASE WHEN price < open THEN 1 ELSE 0 END) AS non_breakout_days
+FROM trading.prices
+-- this another way to specify the year
+WHERE market_date >= '2020-01-01' AND market_date <= '2020-12-31'
+GROUP BY ticker;
