@@ -108,6 +108,9 @@ FROM trading.prices
 WHERE market_date >= '2020-01-01' AND market_date <= '2020-12-31'
 GROUP BY ticker;
 
+
+
+-- TOOD 마지막 문제 고민 하여 보기 !!!!!!!!!!!!!!!!!!!
 -- Question 11
 -- What percentage of days in 2020 were breakout days vs non-breakout days? 
 -- Round the percentages to 2 decimal places

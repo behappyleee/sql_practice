@@ -102,17 +102,90 @@ GROUP BY member_id;
 -- What was the final quantity holding of Bitcoin for each member? 
 -- Sort the output from the highest BTC holding to lowest
 			SELECT t.member_id  
-				 , t.txn_time
+				 , max(t.txn_time)
 				 , t.quantity 
 			  FROM trading.transactions t 
           GROUP BY t.member_id;
 
 -- Question 8
 -- Which members have sold less than 500 Bitcoin? Sort the output from the most BTC sold to least
+			SELECT t.member_id 
+			  FROM trading.transactions t 	
+             WHERE t.ticker = 'BTC'
+               AND t.quantity < 500
+               AND t.txn_type = 'SELL';
+         
+              SELECT t.member_id 
+                   , sum(t.quantity) AS 'SUM QUANTITY'
+                FROM trading.transactions t 
+               WHERE t.ticker = 'BTC'
+                 AND t.txn_type = 'SELL'
+                 AND 'SUM QUANTITY' < 500
+            GROUP BY t.member_id; 
+                 
+                 
+         	SELECT * FROM trading.transactions t WHERE t.txn_type = 'SELL';
+				
+			SELECT * 
+			  FROM trading.transactions t
+			 WHERE t.txn_type = 'SELL';
+		
+            SELECT * 
+		      FROM trading.transactions t
+		     WHERE t.txn_type = 'SELL'
+		  GROUP BY t.member_id
+		    HAVING sum(t.quantity) < 500;
+	
+		   SELECT * FROM trading.transactions t WHERE t.quantity < 500;
 
-
-
-
+-- ANSWER
+			SELECT member_id
+			     , SUM(quantity) AS btc_sold_quantity
+			  FROM trading.transactions
+			 WHERE ticker = 'BTC'
+			   AND txn_type = 'SELL'
+		  GROUP BY member_id
+			HAVING SUM(quantity) < 500
+		  ORDER BY btc_sold_quantity DESC;
+		  
+		  WITH cte AS (
+				SELECT
+				  member_id,
+				  SUM(quantity) AS btc_sold_quantity
+				FROM trading.transactions
+				WHERE ticker = 'BTC'
+				  AND txn_type = 'SELL'
+				GROUP BY member_id
+				)
+			SELECT * FROM cte
+			WHERE btc_sold_quantity < 500
+			ORDER BY btc_sold_quantity DESC;
+		
+		  SELECT * FROM (
+			  SELECT
+			    member_id,
+			    SUM(quantity) AS btc_sold_quantity
+			  FROM trading.transactions
+			  WHERE ticker = 'BTC'
+			    AND txn_type = 'SELL'
+			  GROUP BY member_id
+			) AS subquery
+			WHERE btc_sold_quantity < 500
+			ORDER BY btc_sold_quantity DESC;
+		  
+-- Question 9
+-- What is the total Bitcoin quantity for each member_id owns after adding all of the BUY and SELL transactions 
+-- from the transactions table? Sort the output by descending total quantity		  
+		 SELECT * 
+		   FROM trading.transactions t 
+	   GROUP BY t.member_id; 
+		  
+		  
+		  
+		  
+		  
+		  
+		  
 
 
 
