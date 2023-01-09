@@ -180,14 +180,43 @@ GROUP BY member_id;
 		   FROM trading.transactions t 
 	   GROUP BY t.member_id; 
 		  
+-- Question 10
+-- Which member_id has the highest buy to sell ratio by quantity?		  
+   				SELECT * 
+   		  		  FROM trading.transactions t
+   		  		 WHERE t.txn_type = 'SELL'
+   		  	  GROUP BY t.member_id;  
+		   
 		  
-		  
-		  
-		  
-		  
-		  
+-- Question 11
+-- For each member_id - which month had the highest total Ethereum quantity sold`?		  
+					SELECT  t.member_id 
+					      , MONTH(t.txn_time) AS 'MONTH'
+					      , t.txn_time 
+					      , max(t.quantity)  
+				      FROM trading.transactions t 
+				     WHERE t.ticker = 'ETH'
+				       AND t.txn_type = 'SELL'
+				  GROUP BY t.member_id , MONTH(t.txn_time); 
 
-
+-- ANSWER
+	WITH cte_ranked AS (
+			SELECT
+			  member_id,
+			  DATE_TRUNC('MON', txn_date)::DATE AS calendar_month,
+			  SUM(quantity) AS sold_eth_quantity,
+		  	RANK() OVER (PARTITION BY member_id ORDER BY SUM(quantity) DESC) AS month_rank
+			FROM trading.transactions
+			WHERE ticker = 'ETH' AND txn_type = 'SELL'
+			GROUP BY member_id, calendar_month
+		)
+	SELECT
+	  member_id,
+	  calendar_month,
+	  sold_eth_quantity
+	FROM cte_ranked
+	WHERE month_rank = 1
+	ORDER BY sold_eth_quantity DESC;				 
 
 
 
