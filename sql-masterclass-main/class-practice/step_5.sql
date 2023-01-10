@@ -104,10 +104,18 @@ SELECT * FROM trading.members m;
 				ORDER BY total_quantity DESC
 				LIMIT 3;
 		 
-		 
+-- TODO Question 4 5 번 이해 안됨 조금더 확인하여 보기 !!!!
+			
+			
+			
 -- Question 4
 -- What is total value of all Ethereum portfolios for each region at the end date of our analysis? 
 -- Order the output by descending portfolio value
+		WITH 	
+			
+			
+			
+			
 		SELECT sum(t.quantity) 
 	      FROM trading.transactions t
 	     WHERE t.ticker = 'ETH'; 
@@ -166,4 +174,60 @@ SELECT * FROM trading.members m;
 		ORDER BY avg_ethereum_value DESC;
 		
 		
+-- Question 5
+-- What is the average value of each Ethereum portfolio in each region? Sort this output in descending order
+SELECT * FROM trading.transactions t;
+SELECT * FROM trading.members m;
+
+				SELECT m.region 
+				     , avg(t.quantity) AS avg_qu
+				  FROM trading.members m
+			INNER JOIN trading.transactions t	
+					ON m.member_id = t.member_id 
+				 WHERE t.ticker = 'ETH'
+			  GROUP BY m.region
+			  ORDER BY avg_qu DESC; 
+
+-- ANSWER
+			 
+		 	SELECT * FROM trading.prices p WHERE p.market_date = '2021-08-29';
+			 
+			WITH cte_latest_price AS (
+				  SELECT
+				    ticker,
+				    price
+				  FROM trading.prices
+				  WHERE ticker = 'ETH'
+				  AND market_date = '2021-08-29'
+			)
+			SELECT
+			  members.region,
+			  AVG(
+			    CASE
+			      WHEN transactions.txn_type = 'BUY'  THEN transactions.quantity
+			      WHEN transactions.txn_type = 'SELL' THEN -transactions.quantity
+			    END
+			  ) * cte_latest_price.price AS avg_ethereum_value
+			FROM trading.transactions
+			INNER JOIN cte_latest_price
+			  ON transactions.ticker = cte_latest_price.ticker
+			INNER JOIN trading.members
+			  ON transactions.member_id = members.member_id
+			WHERE transactions.ticker = 'ETH'
+			GROUP BY members.region, cte_latest_price.price
+			ORDER BY avg_ethereum_value DESC;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
