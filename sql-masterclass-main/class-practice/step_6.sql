@@ -126,12 +126,40 @@ WITH cte AS
 SELECT 3 FROM DUAL;
 
 -- Step 2
--- Let's take a look at our base table now to see what data we have to play with - to keep things simple, 
+-- Let's take a look at our base table now to see what data we have to play with 
+-- to keep things simple, 
 -- let's take a look at Abe's data from our new temp table temp_portfolio_base
--- Inspect the year_end, ticker and yearly_quantity values from our new temp table temp_portfolio_base 
+-- Inspect the year_end, ticker and yearly_quantity values from our 
+-- new temp table temp_portfolio_base 
 -- for Mentor Abe only. Sort the output with ordered BTC values followed by ETH values
 
+			SELECT * 
+			  FROM trading.members m 
+		INNER JOIN trading.transactions t 
+		        ON m.member_id = t.member_id 
+			 WHERE m.first_name	= 'Abe'
+			   AND MONTH(t.txn_time) = 12
+			   AND DAY(t.txn_time) =  ; 
+			  
 
+
+
+SELECT * FROM trading.members m WHERE m.first_name = 'Abe';
+CREATE TEMPORARY TABLE temp_tesssstt (
+	SELECT * FROM trading.members m WHERE m.first_name = 'Abe'
+);
+SELECT * FROM temp_tesssstt;
+SELECT * FROM trading.members m  WHERE m.first_name = 'Abe';
+SELECT * FROM trading.members m;
+CREATE TEMPORARY TABLE temp_table_test (
+	SELECT * FROM trading.members m 
+);
+WITH temp_test AS (
+	SELECT member_id 
+	     , first_name
+	  FROM trading.members  
+	LIMIT 5
+);
 
 
 
