@@ -77,6 +77,51 @@ CREATE TEMPORARY TABLE temp_cumulative_portfolio_base AS
 				GROUP BY base.first_name
 				ORDER BY portfolio_value DESC;
 			
--- !!!!!!!!!!!!!!!!!!!!	2 번 부터 문제 풀기 !!!!!!!!!!!!!!!!!!!!
+-- Question 2
+-- What is the total portfolio value for each region at the end of 2019?
+-- Let's also perform the same ordering and rounding for this query too.
+			
+					SELECT m.region
+				     	 , (
+				     	 	CASE 
+					     	 	WHEN t.txnType = 'SELL' THEN t.quantity 
+				     	 		WHEN t.txnType = 'BUY'  THEN -t.quantity
+				     	 	END
+				     	   ) AS 'Total Sum'
+					  FROM trading.members m 
+				INNER JOIN trading.transactions t	
+				        ON m.member_id = t.member_id 
+		             WHERE YEAR(t.txn_time) = '2019'
+		             -- WHERE YEAR(t.txn_time) = '2019-12-31'
+		          GROUP BY m.region
+		          ORDER BY sum(t.quantity) DESC;
+		         
+		         
+		         SELECT * FROM trading.transactions t WHERE t.txn_time like '%2019-12%'; 
+		         
+		         
+		         
+		         -- ANSWER
+		         SELECT
+					  base.region,
+					  ROUND(
+					    SUM(base.cumulative_quantity * prices.price),
+					    2
+					  ) AS portfolio_value
+					FROM temp_cumulative_portfolio_base AS base
+					INNER JOIN trading.prices
+					  ON base.ticker = prices.ticker
+					  AND base.year_end = prices.market_date
+					WHERE base.year_end = '2019-12-31'
+					GROUP BY base.region
+					ORDER BY portfolio_value DESC;
+		         
+		         
+			
+			
+			
+			
+			
+			
 			
 			
